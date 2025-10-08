@@ -1,30 +1,28 @@
 <?php
 
-$userError = "";
-$passError = "";
+require_once("functions.php");
 
-if (!isset($_POST['username'])) {
-    $userError = "Please fill in the username";
+session_start();
+if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] === true) {
+	die(header("Location: " . PAGE_CUSTOMER));
 }
 
-if (!isset($_POST['password']) || empty($_POST[password])){
-    $passError = "Please fill in the password";
+print getTop();
+
+print "<h1>Hello World</h1>\n";
+
+if (isset($_SESSION['errors']) && is_array($_SESSION['errors']) 
+	&& count($_SESSION['errors']) > 0) {
+	foreach ($_SESSION['errors'] as $error) {
+		print $error . "<br>";
+	}
+	$_SESSION['errors'] = array();
 }
 
+print "<form action='login-process.php' method='POST'>\n";
+print "User: <input type='text' name='username'><br>\n";
+print "Pass: <input type='password' name='password'><br>\n";
+print "<input type='submit' name='submit_form'>\n";
+print "</form>\n";
 
-
-print "<!DOCTYPE html>";
-print "<html lang=\"en\">";
-print "<head>";
-print "<title>Minimal Page</title>";
-print "</head>";
-print "<body>";
-print "<h1>Hello World</h1><br>";
-print "<form action='login-process.php' method='POST'>";
-print "USER: <input type='text' name='username'> . $userError . <br>";
-print "PASSWORD: <input type='password' name='password'> . $passError . <br>";
-print "<input type='submit' name='submit_form'>";
-print "</form>";
-print "</body>";
-print "</html>";
-?>
+print getEnd();
